@@ -1,0 +1,189 @@
+# System-Ausschlüsse - spezifisch /dev/ im Root, nicht in anderen Pfaden
+/dev/
+/proc/*
+/sys/*
+/tmp/*
+/run/*
+/mnt/*
+/media/*
+/var/tmp/*
+/var/cache/*
+/var/log/*
+/swapfile
+/swap.img
+
+# Entwicklungs-Ausschlüsse - Node.js/JavaScript
+**/node_modules
+**/.npm
+**/.yarn/cache
+**/.pnpm-store
+**/dist
+**/build
+**/.next
+**/.nuxt
+**/npm-debug.log*
+**/yarn-error.log
+
+# Entwicklungs-Ausschlüsse - Python
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/.venv
+**/venv
+**/env
+**/.conda
+**/.pip/cache
+**/site-packages
+
+# Entwicklungs-Ausschlüsse - Ruby/Rails
+**/vendor/bundle
+**/tmp/cache
+**/log
+**/.bundle
+
+# Entwicklungs-Ausschlüsse - PHP/Composer
+**/vendor
+**/composer.lock
+
+# Entwicklungs-Ausschlüsse - Java/Maven/Gradle
+**/target
+**/.gradle
+**/.m2/repository
+
+# Entwicklungs-Ausschlüsse - Rust
+**/target
+**/.cargo/registry
+
+# Entwicklungs-Ausschlüsse - Go
+**/go/pkg
+**/go/bin
+
+# Cache-Ausschlüsse - Browser
+**/.mozilla/firefox/*/Cache*
+**/.cache/google-chrome*
+**/.cache/chromium*
+**/.cache/mozilla*
+
+# Cache-Ausschlüsse - Allgemein
+**/.cache
+**/Cache
+**/cache
+**/CacheStorage
+**/Service Worker/CacheStorage
+**/.local/share/Trash
+**/.thumbnails
+**/.local/share/thumbnailers
+
+# IDE & Editor-Ausschlüsse
+**/.vscode
+**/*.code-workspace
+**/.idea
+**/.vim/bundle
+**/.local/share/nvim
+**/.config/sublime-text*/Packages/User/Package Control.cache
+
+# Docker & VMs
+**/docker/volumes
+**/.docker
+**/VirtualBox VMs
+**/.vagrant.d/boxes
+
+# Windows-Müll (für Shared-Partition)
+**/Thumbs.db
+**/Desktop.ini
+**/$RECYCLE.BIN
+**/System Volume Information
+**/*.tmp
+**/*.temp
+
+# Git-Objekte (können riesig werden)
+**/.git/objects/pack/*.pack
+
+# Logs und temporäre Dateien
+**/*.log
+**/logs/*
+**/.DS_Store
+
+# Downloads - große Dateien und Font-Sammlungen
+**/Downloads/Fonts*
+**/Downloads/*.zip
+**/Downloads/*.tar.gz
+**/Downloads/*.7z
+**/Downloads/*.rar
+**/Downloads/*.iso
+**/Downloads/*.dmg
+**/Downloads/font*
+**/Downloads/*font*
+**/__MACOSX
+**/._*
+
+# Rails spezifische Ausschlüsse
+**/tmp/cache/*
+**/tmp/pids/*
+**/tmp/sockets/*
+**/tmp/storage/*
+**/tmp/screenshots/*
+**/log/*.log
+**/storage/development.sqlite3
+**/storage/test.sqlite3*
+
+# Laravel/PHP spezifische Ausschlüsse
+**/storage/framework/cache/*
+**/storage/framework/sessions/*
+**/storage/framework/views/*
+**/storage/logs/*
+**/bootstrap/cache/*
+
+# Jupyter Notebook Ausschlüsse
+**/.ipynb_checkpoints
+
+# Kirby CMS spezifische Ausschlüsse (können regeneriert werden)
+**/site/cache/*
+**/site/sessions/*
+**/media/pages/*
+**/media/panel/*
+
+# Development-spezifische Datenbanken (außer Schema/Migration)
+**/development.sqlite3
+**/test.sqlite3*
+**/*.db-shm
+**/*.db-wal
+
+# Obsidian spezifische Ausschlüsse
+**/.obsidian/workspace
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
+**/.obsidian/cache
+**/.trash
+
+# Syncthing Ausschlüsse
+**/.stfolder
+**/.stfolder (*)
+
+# System-Verzeichnisse ohne User-Zugriff
+/lost+found
+/root
+/var/lib/*/private
+/var/lib/polkit-1
+/var/lib/gdm3
+/var/lib/bluetooth
+/var/lib/fprint
+/var/lib/saned
+/var/lib/udisks2
+/var/lib/docker
+/var/lib/containerd
+/var/lib/redis
+/var/lib/sss/secrets
+/var/lib/sss/db
+/var/lib/sss/keytabs
+/var/lib/snapd/cookie
+/var/lib/snapd/void
+/var/spool/cron/crontabs
+/var/spool/cups
+/var/spool/rsyslog
+/etc/credstore*
+/etc/ssl/private
+/etc/sssd
+/etc/redis
+/etc/polkit-1/rules.d
+/opt/containerd

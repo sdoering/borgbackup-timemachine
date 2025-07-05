@@ -1,0 +1,36 @@
+# Exclude-Pattern für Shared-Partition
+# (Weniger Development-Kram, mehr Windows-Kompatibilität)
+
+# Windows-Müll
+**/Thumbs.db
+**/Desktop.ini
+**/$RECYCLE.BIN
+**/System Volume Information
+**/hiberfil.sys
+**/pagefile.sys
+
+# Temporäre Dateien
+**/*.tmp
+**/*.temp
+**/~$*
+
+# Cache-Dateien
+**/Cache
+**/cache
+**/.cache
+
+# Papierkorb
+**/.Trash-*
+**/.local/share/Trash
+
+# Thumbnails
+**/.thumbnails
+**/thumbs.db
+
+# Versteckte System-Dateien
+**/.DS_Store
+**/.directory
+
+# Logs
+**/*.log
+**/logs/*
