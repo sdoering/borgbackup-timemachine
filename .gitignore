@@ -1,0 +1,32 @@
+# Sensitive files
+ftp-credentials
+*.passphrase
+*.key
+
+# Log files
+*.log
+logs/
+
+# Runtime files
+*.lock
+*.pid
+
+# Temporary files
+tmp/
+.tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Backup repositories (don't commit actual backups)
+mounts/
+repositories/
+backup-data/
