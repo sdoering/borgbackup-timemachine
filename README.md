@@ -195,6 +195,21 @@ Pull requests welcome! Please ensure:
 
 MIT License - see LICENSE file for details
 
+## Responsible AI Development
+
+This project was developed with significant assistance from **Claude Code** (Anthropic's CLI), but – and this is important – every single line of code has been manually reviewed, tested, and validated by an actual human (that would be me! 👋).
+
+While Claude helped with the heavy lifting, architecture decisions, and even some of the more tedious configuration templating, I've personally:
+- ✅ **Tested the entire system** on my own laptop for weeks
+- ✅ **Code-reviewed every script** for security and functionality  
+- ✅ **Verified all configurations** work in real-world scenarios
+- ✅ **Sanitized sensitive information** before making it public
+- ✅ **Run actual backups** and recovery tests
+
+Think of Claude as a very capable coding partner who never gets tired of writing boilerplate, but the final responsibility (and the backup of my precious development projects!) rests firmly with human judgment. 
+
+The AI helped me build it faster and probably caught some edge cases I might have missed, but I wouldn't trust my data to anything I haven't personally verified. Neither should you! 😉
+
 ## Blog Article
 
 This backup system is detailed in a comprehensive blog post at [moorwald.dev](https://moorwald.dev) including technical deep-dive, lessons learned, and implementation decisions.
