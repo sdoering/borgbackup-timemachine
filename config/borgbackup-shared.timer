@@ -1,0 +1,14 @@
+[Unit]
+Description=Borg Backup - Shared Partition Timer
+Requires=borgbackup-shared.service
+
+[Timer]
+# Run three times daily: 10 AM, 6 PM, 9 PM
+OnCalendar=10:00
+OnCalendar=18:00
+OnCalendar=21:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

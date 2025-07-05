@@ -1,0 +1,21 @@
+[Unit]
+Description=Borg Backup - Home Directory
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/borgbackup/scripts/borg-backup.sh home
+Environment=HOME=%h
+WorkingDirectory=%h
+StandardOutput=journal
+StandardError=journal
+
+# Don't restart on failure - let the timer handle the next attempt
+Restart=no
+
+# Give backup enough time
+TimeoutStartSec=3600
+
+[Install]
+WantedBy=default.target

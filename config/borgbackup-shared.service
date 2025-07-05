@@ -1,0 +1,21 @@
+[Unit]
+Description=Borg Backup - Shared Partition
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/borgbackup/scripts/borg-backup.sh shared
+Environment=HOME=%h
+WorkingDirectory=%h
+StandardOutput=journal
+StandardError=journal
+
+# Don't restart on failure
+Restart=no
+
+# Give backup enough time (shared partition might be larger)
+TimeoutStartSec=7200
+
+[Install]
+WantedBy=default.target

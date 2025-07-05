@@ -1,0 +1,15 @@
+[Unit]
+Description=Borg Backup - Home Directory Timer
+Requires=borgbackup-home.service
+
+[Timer]
+# Run every hour, but only when system is active
+OnCalendar=hourly
+Persistent=false
+RandomizedDelaySec=300
+
+# Only run when AC power is available (optional)
+# ConditionACPower=true
+
+[Install]
+WantedBy=timers.target
