@@ -1,0 +1,18 @@
+[Unit]
+Description=Borg Backup FTP Upload Timer
+Requires=ftp-upload.service
+
+[Timer]
+# Run every 15 minutes when system is active
+OnCalendar=*:00/15
+Persistent=false
+RandomizedDelaySec=60
+
+# Only run when AC power is available to preserve battery
+ConditionACPower=true
+
+# Prevent running immediately after boot
+OnBootSec=5min
+
+[Install]
+WantedBy=timers.target

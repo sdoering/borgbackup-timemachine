@@ -83,12 +83,22 @@ sudo apt install borgbackup lftp
 
 ## Architecture
 
-The system uses a 3-step FTP sync approach:
-1. **Sync Down**: Download repository from FTP to local storage
-2. **Backup**: BorgBackup operates on local repository copy
-3. **Sync Up**: Upload updated repository back to FTP
+### Version 2.0: Separated FTP Upload System
 
-This is more reliable than direct FTP mounting and handles network interruptions gracefully.
+Starting with version 2.0, the backup system uses a **decoupled approach** that solves sleep/suspend mode issues:
+
+#### Backup Process:
+1. **Sync Down**: Download repository from FTP to local storage
+2. **Backup**: BorgBackup operates on local repository copy  
+3. **Local Storage**: Backup is immediately available locally
+
+#### FTP Upload Process (Separate Timer):
+1. **Independent Upload**: Separate timer checks for repository changes
+2. **Smart Upload**: Only uploads when changes detected and system is active
+3. **Power-Aware**: Only runs when on AC power to preserve battery
+4. **Sleep-Resistant**: Runs every 15 minutes when system is awake
+
+This approach prevents FTP upload failures when the laptop goes to sleep mid-backup and significantly improves battery life.
 
 ## Directory Structure
 
@@ -97,6 +107,7 @@ This is more reliable than direct FTP mounting and handles network interruptions
 ├── scripts/                  # Backup logic
 │   ├── backup-manager.sh     # Central management
 │   ├── borg-backup.sh        # Main backup script
+│   ├── ftp-upload.sh         # Separate FTP upload (v2.0+)
 │   ├── mount-ftp.sh          # FTP sync operations
 │   ├── network-check.sh      # Network detection
 │   └── install-backup-system.sh # Installation
@@ -123,6 +134,7 @@ This is more reliable than direct FTP mounting and handles network interruptions
 status                    # Show system status
 backup {home|shared}      # Force backup
 ftp {setup|test|check}    # Manage FTP connection
+ftp-status               # Show detailed FTP upload status (v2.0+)
 timers {enable|disable}   # Control automatic scheduling
 logs {backup|home|shared} # View backup logs
 list {home|shared}        # List available archives
@@ -137,8 +149,8 @@ list {home|shared}        # List available archives
 # View logs
 tail -f ~/.local/borgbackup/logs/backup.log
 
-# Check systemd timers
-systemctl --user list-timers | grep borgbackup
+# Check systemd timers (includes FTP upload timer in v2.0+)
+systemctl --user list-timers | grep -E "(borgbackup|ftp-upload)"
 
 # View systemd logs
 journalctl --user -u borgbackup-home.service -f
@@ -153,6 +165,13 @@ journalctl --user -u borgbackup-home.service -f
 
 # Check FTP status
 ./scripts/mount-ftp.sh check
+
+# Check FTP upload status (v2.0+)
+./scripts/backup-manager.sh ftp-status
+
+# Force FTP upload (v2.0+)
+./scripts/ftp-upload.sh force user-data-repo
+./scripts/ftp-upload.sh force shared-data-repo
 ```
 
 ### Network Detection

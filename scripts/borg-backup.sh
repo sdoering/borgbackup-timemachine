@@ -175,11 +175,9 @@ perform_backup() {
         log_message "INFO" "Compacting $backup_type repository"
         borg compact "$repo_path"
         
-        # Sync back to FTP
-        if ! sync_back_to_ftp "$repo_name"; then
-            log_message "ERROR" "$backup_type backup sync to FTP failed"
-            exit 1
-        fi
+        # Note: FTP upload is now handled by separate service
+        # The FTP upload timer will handle syncing to FTP when appropriate
+        log_message "INFO" "$backup_type backup completed, FTP upload will be handled separately"
         
     else
         log_message "ERROR" "$backup_type backup failed"

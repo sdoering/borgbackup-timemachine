@@ -1,0 +1,22 @@
+[Unit]
+Description=Borg Backup FTP Upload Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=%i
+ExecStart=/home/sdoering/.local/borgbackup/scripts/ftp-upload.sh upload
+TimeoutSec=1800
+PrivateTmp=true
+
+# Only run when conditions are met
+ExecCondition=/home/sdoering/.local/borgbackup/scripts/network-check.sh home
+ExecCondition=/home/sdoering/.local/borgbackup/scripts/mount-ftp.sh check
+
+# Environment
+Environment=HOME=/home/sdoering
+Environment=USER=sdoering
+
+[Install]
+WantedBy=default.target

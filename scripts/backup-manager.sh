@@ -7,6 +7,15 @@ set -euo pipefail
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/../config/backup.conf"
 
+# Import passphrase
+if [[ -f "$HOME/.borg_passphrase" ]]; then
+    export BORG_PASSPHRASE="$(cat "$HOME/.borg_passphrase")"
+elif [[ -f "$HOME/.config/borg/passphrase" ]]; then
+    export BORG_PASSPHRASE="$(cat "$HOME/.config/borg/passphrase")"
+else
+    echo "Warning: No Borg passphrase found" >&2
+fi
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -42,7 +51,7 @@ show_status() {
     
     # Timer status
     print_status "$BLUE" "Backup Timers:"
-    systemctl --user list-timers | grep borgbackup || true
+    systemctl --user list-timers | grep -E "(borgbackup|ftp-upload)" || echo "No backup timers found"
     echo ""
     
     # Recent backup status
@@ -51,6 +60,15 @@ show_status() {
         tail -5 "$LOG_DIR/backup.log"
     else
         print_status "$YELLOW" "No backup log found"
+    fi
+    echo ""
+    
+    # FTP Upload status
+    print_status "$BLUE" "FTP Upload Status:"
+    if [[ -f "$LOG_DIR/ftp-upload.log" ]]; then
+        tail -3 "$LOG_DIR/ftp-upload.log"
+    else
+        print_status "$YELLOW" "No FTP upload log found"
     fi
     echo ""
     
@@ -73,12 +91,20 @@ show_repo_info() {
             local repo_path="$BORG_REPO_BASE/$repo"
             if [[ -d "$repo_path" ]]; then
                 print_status "$GREEN" "Repository: $repo"
-                borg info "$repo_path" 2>/dev/null | grep -E "(Original size|Compressed size|Deduplicated size)" || true
+                
+                # Get repository statistics
+                local repo_stats=$(borg info "$repo_path" 2>/dev/null | grep -A 3 "All archives:" || echo "Statistics not available")
+                if [[ "$repo_stats" != "Statistics not available" ]]; then
+                    echo "$repo_stats"
+                else
+                    echo "Repository size information not available"
+                fi
+                
                 echo "Recent archives:"
-                borg list "$repo_path" 2>/dev/null | tail -3 || true
+                borg list "$repo_path" 2>/dev/null | tail -3 || echo "No archives found"
                 echo ""
             else
-                print_status "$YELLOW" "Repository $repo not found"
+                print_status "$YELLOW" "Repository $repo not found at $repo_path"
             fi
         done
     else
@@ -183,7 +209,8 @@ show_help() {
     echo "  backup home          Force home directory backup"
     echo "  backup shared        Force shared partition backup"
     echo "  ftp {setup|test|check}    Manage FTP connection"
-    echo "  timers {enable|disable|restart}  Manage backup timers"
+    echo "  timers {enable|disable|restart}  Manage backup timers
+  ftp-status               Show detailed FTP upload status"
     echo "  logs backup          Show main backup log"
     echo "  logs home            Show home backup log"
     echo "  logs shared          Show shared backup log"
@@ -234,13 +261,26 @@ case "${1:-help}" in
         ;;
     "list")
         if [[ -n "${2:-}" ]]; then
-            list_archives "${2}-data-repo"
+            case "$2" in
+                "home")
+                    list_archives "user-data-repo"
+                    ;;
+                "shared")
+                    list_archives "shared-data-repo"
+                    ;;
+                *)
+                    echo "Usage: $0 list {home|shared}"
+                    ;;
+            esac
         else
             echo "Usage: $0 list {home|shared}"
         fi
         ;;
     "install")
         "$SCRIPT_DIR/install-backup-system.sh"
+        ;;
+    "ftp-status")
+        "$SCRIPT_DIR/ftp-upload.sh" status
         ;;
     "help"|*)
         show_help
